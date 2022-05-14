@@ -116,6 +116,15 @@ exports.getUserById = async function (req, res) {
     return res.send(response(baseResponse.SUCCESS, userByUserId));
 };
 
+exports.deleteUserById = async function (req, res) {
+    const userId = req.params.userId;
+
+    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+    await userService.deleteUser(userId);
+    return res.send(`${userId} 삭제`);
+
+}
+
 
 // TODO: After 로그인 인증 방법 (JWT)
 /**

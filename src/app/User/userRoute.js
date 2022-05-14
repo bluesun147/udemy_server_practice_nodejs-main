@@ -14,6 +14,10 @@ module.exports = function(app){
     // 3. 특정 유저 조회 API
     app.get('/app/users/:userId', user.getUserById);
 
+    //////////////
+    // 특정 유저 삭제
+    app.delete('/app/users/:userId', user.deleteUserById);
+
 
     // TODO: After 로그인 인증 방법 (JWT)
     // 로그인 하기 API (JWT 생성)

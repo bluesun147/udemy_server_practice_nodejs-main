@@ -82,6 +82,14 @@ async function updateUserInfo(connection, id, nickname) {
   return updateUserRow[0];
 }
 
+async function deleteUser(connection, id) {
+  const deleteUserQuery = `
+  DELETE FROM UserInfo
+  WHERE userIdx = ?;`;
+  const deleteUserRow = await connection.query(deleteUserQuery, id);
+  return deleteUserRow[0];
+
+}
 
 module.exports = {
   selectUser,
@@ -91,4 +99,5 @@ module.exports = {
   selectUserPassword,
   selectUserAccount,
   updateUserInfo,
+  deleteUser
 };

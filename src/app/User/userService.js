@@ -42,6 +42,16 @@ exports.createUser = async function (email, password, nickname) {
     }
 };
 
+exports.deleteUser = async function (userId) {
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);   
+        await userDao.deleteUser(connection, userId);
+        connection.release();
+        return response(baseResponse.SUCCESS);
+    } catch(err) {
+        
+    }
+}
 
 // TODO: After 로그인 인증 방법 (JWT)
 exports.postSignIn = async function (email, password) {
