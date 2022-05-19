@@ -116,6 +116,7 @@ exports.getUserById = async function (req, res) {
     return res.send(response(baseResponse.SUCCESS, userByUserId));
 };
 
+// 삭제
 exports.deleteUserById = async function (req, res) {
     const userId = req.params.userId;
 
