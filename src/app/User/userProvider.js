@@ -22,13 +22,14 @@ exports.retrieveUserList = async function (email) {
   }
 };
 
-exports.retrieveUser = async function (userIdx) {
+//////////////////////////////////
+exports.retrieveUserInfo = async function (userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const userResult = await userDao.selectUserIdx(connection, userIdx);
+  const userInfoResult = await userDao.selectUserInfo(connection, userIdx);
 
   connection.release();
 
-  return userResult[0];
+  return userInfoResult[0];
 };
 
 exports.emailCheck = async function (email) {
@@ -39,11 +40,11 @@ exports.emailCheck = async function (email) {
   return emailCheckResult;
 };
 
-exports.passwordCheck = async function (selectUserPasswordParams) {
+exports.passwordCheck = async function (email) {
   const connection = await pool.getConnection(async (conn) => conn);
   const passwordCheckResult = await userDao.selectUserPassword(
       connection,
-      selectUserPasswordParams
+      email
   );
   connection.release();
   return passwordCheckResult[0];

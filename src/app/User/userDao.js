@@ -21,15 +21,26 @@ async function selectUserEmail(connection, email) {
   return emailRows;
 }
 
+//////////////////////////
 // userId 회원 조회
-async function selectUserIdx(connection, userIdx) {
-  const selectUserIdxQuery = `
-                 SELECT email, nickname, name
-                 FROM UserInfo
-                 WHERE userIdx = ?;
+async function selectUserInfo(connection, userIdx) {
+  const selectUserInfoQuery = `
+        SELECT u.nickName as nickName,
+          u.name as name,
+          u.profileImgUrl as profileImgUrl, 
+          u.website as website,
+          IF(followerCount is null, 0, followerCount) as followerCount,
+          If(followingCount is null, 0, followingCount) as followingCount,
+          If(postCount is null, 0, postCount) as postCount
+        FROM UserInfo as u
+          left join (select userIdx, count(postIdx) as postCount from Post WHERE status = 'ACTIVE' group by postIdx) p on p.userIdx = u.userIdx
+          left join (select followerIdx, count(followIdx) as followerCount from Follow WHERE status = 'ACTIVE' group by followIdx) fc on fc.followerIdx = u.userIdx
+          left join (select followeeIdx, count(followIdx) as followingCount from Follow WHERE status = 'ACTIVE' group by followIdx) f on f.followeeIdx = u.userIdx
+      WHERE u.userIdx = ? and u.status = 'ACTIVE'
+      group by u.userIdx;
                  `; // ?는 값을 입력받는다는 뜻
-  const [userRow] = await connection.query(selectUserIdxQuery, userIdx);
-  return userRow;
+  const [userInfoRow] = await connection.query(selectUserInfoQuery, userIdx);
+  return userInfoRow;
 }
 
 // 유저 생성
@@ -53,8 +64,8 @@ async function selectUserPassword(connection, selectUserPasswordParams) {
         FROM UserInfo 
         WHERE email = ? AND password = ?;`;
   const selectUserPasswordRow = await connection.query(
-      selectUserPasswordQuery,
-      selectUserPasswordParams
+    selectUserPasswordQuery,
+    selectUserPasswordParams
   );
 
   return selectUserPasswordRow;
@@ -67,8 +78,8 @@ async function selectUserAccount(connection, email) {
         FROM UserInfo 
         WHERE email = ?;`;
   const selectUserAccountRow = await connection.query(
-      selectUserAccountQuery,
-      email
+    selectUserAccountQuery,
+    email
   );
   return selectUserAccountRow[0];
 }
@@ -94,7 +105,7 @@ async function deleteUser(connection, id) {
 module.exports = {
   selectUser,
   selectUserEmail,
-  selectUserIdx,
+  selectUserInfo,
   insertUserInfo,
   selectUserPassword,
   selectUserAccount,
