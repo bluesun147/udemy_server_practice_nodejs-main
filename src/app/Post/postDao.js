@@ -39,7 +39,7 @@ async function selectPosts(connection, userIdx) {
 	            end as uploadTime,
 	            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot
 	        FROM Post as p
-	            join User as u on u.userIdx = p.userIdx
+	            join UserInfo as u on u.userIdx = p.userIdx
 	            left join (select postIdx, count(postLikeidx) as postLikeCount from PostLike WHERE status = 'ACTIVE' group by postIdx) plc on plc.postIdx = p.postIdx
 	            left join (select postIdx, count(commentIdx) as commentCount from Comment WHERE status = 'ACTIVE' group by postIdx) c on c.postIdx = p.postIdx
 	            left join Follow as f on f.followeeIdx = p.userIdx and f.status = 'ACTIVE'
