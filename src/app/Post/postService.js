@@ -35,12 +35,29 @@ exports.createPost = async function(userIdx, content, postImgUrls) {
     }
 }
 
+// exports.editPost = async function (postIdx, content) {
+//     const connection = await pool.getConnection(async (conn) => conn);
+
+//     try {
+//         const editPostParams = [content, postIdx];
+//         const editPostResult = await postDao.updatePost(connection, editPostParams);
+
+//         return response(baseResponse.SUCCESS);
+//     } catch (err) {
+//         console.log(`App - editPost Service error\n: ${err.message}`);
+
+//         return errResponse(baseResponse.DB_ERROR);
+//     } finally {
+//         connection.release();
+//     }
+// }
+
 exports.editPost = async function (postIdx, content) {
     const connection = await pool.getConnection(async (conn) => conn);
 
     try {
         const editPostParams = [content, postIdx];
-        const editPostResult = await postDao.updatePost(connection, editPostParams);
+        const editPostResult = await postDao.updatePost(connection, editPostParams)
 
         return response(baseResponse.SUCCESS);
     } catch (err) {

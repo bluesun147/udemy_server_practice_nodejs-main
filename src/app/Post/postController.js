@@ -1,5 +1,5 @@
 const baseResponse = require("../../../config/baseResponseStatus");
-const {response, errResponse} = require("../../../config/response");
+const { response, errResponse } = require("../../../config/response");
 const postService = require("./postService");
 const postProvider = require("./postProvider");
 
@@ -8,14 +8,14 @@ const postProvider = require("./postProvider");
     API Name: 게시물 조회 API
     [GET] /posts?userIdx=
 */
-exports.getPosts = async function(req, res) {
+exports.getPosts = async function (req, res) {
     /*
         Query String: userIdx
     */
     const userIdx = req.query.userIdx;
 
     // validation
-    if(!userIdx) {
+    if (!userIdx) {
         return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
     }
     if (userIdx <= 0) {
@@ -32,7 +32,7 @@ exports.getPosts = async function(req, res) {
     API Name: 게시물 생성 API
     [POST] /posts
 */
-exports.postPosts = async function(req, res) {
+exports.postPosts = async function (req, res) {
     /*
         Body: userIdx, content, postImgUrls
     */
@@ -65,10 +65,25 @@ exports.postPosts = async function(req, res) {
     API Name: 게시물 수정 API
     [PATCH] /posts/:postIdx
 */
-exports.patchPost = async function(req, res) {
+exports.patchPost = async function (req, res) {
     /*
     Body: content
     path cariables: postIdx
     */
-   const postIdx = req.params.postIdx;
+    const postIdx = req.params.postIdx;
+    const { content } = req.body;
+
+    if (!postIdx) {
+        return res.send(errResponse(baseResponse.POST_POSTIDX_EMPTY));
+    } else if (!content) {
+        return res.send(errResponse(baseResponse.POST_CONTENT_EMPTY));
+    }
+
+    if (postIdx <= 0) {
+        return res.send(errResponse(baseResponse.POST_POSTIDX_LENGTH));
+    } else if (content.length > 450) {
+        return res.send(errResponse(baseResponse.POST_CONTENT_LENGTH));
+    }
+    const editPostsResponse = await postService.editPost(postIdx, content);
+    return res.send(editPostsResponse);
 }

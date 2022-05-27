@@ -89,15 +89,25 @@ async function insertPostImg(connection, insertPostImgParams) {
     return insertPostImgRow;
 }
 
+// async function updatePost(connection, editPostParams) {
+//     const updatePostQuery = `
+//         UPDATE Post
+//         SET content = ?
+//         WHERE postIdx = ?;
+//     `;
+
+//     const updatePostRow = await connection.query(updatePostQuery, editPostParams);
+
+//     return updatePostRow;
+// }
+
 async function updatePost(connection, editPostParams) {
     const updatePostQuery = `
         UPDATE Post
         SET content = ?
         WHERE postIdx = ?;
-    `;
-
+    `
     const updatePostRow = await connection.query(updatePostQuery, editPostParams);
-
     return updatePostRow;
 }
 
