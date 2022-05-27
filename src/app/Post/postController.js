@@ -68,7 +68,7 @@ exports.postPosts = async function (req, res) {
 exports.patchPost = async function (req, res) {
     /*
     Body: content
-    path cariables: postIdx
+    path variables: postIdx
     */
     const postIdx = req.params.postIdx;
     const { content } = req.body;
@@ -86,4 +86,27 @@ exports.patchPost = async function (req, res) {
     }
     const editPostsResponse = await postService.editPost(postIdx, content);
     return res.send(editPostsResponse);
+}
+
+/*
+    API No. 3.4
+    API Name: 게시물 삭제 API
+    [PATCH] /posts/:postIdx/status
+*/
+
+exports.patchPostStatus = async function (req, res) {
+    /*
+        Path Variable: postIdx
+    */
+    const postIdx = req.params.postIdx;
+    
+    if (!postIdx) {
+        return res.send(errResponse(baseResponse.POST_POSTIDX_EMPTY));
+    } else if (postIdx <= 0) {
+        return res.send(errResponse(baseResponse.POST_POSTIDX_LENGTH));
+    }
+
+    const editPostStatusResponse = await postService.editPostStatus(postIdx);
+
+    return res.send(editPostStatusResponse);
 }

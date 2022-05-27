@@ -9,4 +9,7 @@ module.exports = function(app) {
 
     // 게시물 수정 api
     app.patch('/posts/:postIdx', post.patchPost);
+
+    // 게시물 삭제
+    app.patch('/posts/:postIdx/status', post.patchPostStatus);
 }
